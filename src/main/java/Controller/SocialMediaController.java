@@ -1,5 +1,9 @@
 package Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import Service.*;
+import Model.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -16,7 +20,27 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
+        ObjectMapper om = new ObjectMapper();
+
         app.get("example-endpoint", this::exampleHandler);
+        
+        app.post("/register",  ctx -> { //register account
+            String json = ctx.body();
+            Account acc = om.readValue(json, Account.class);
+            AccountService service = new AccountService();
+            
+            Account createdAcc = service.createAccount(acc);
+
+            if (createdAcc == null) { //account failed to persist to db
+                ctx.status(400);
+                //ctx.result("Account not created, password must be greater than 4 characters / username cannot be blank / account already exists");
+            } else{ //account successfully was created in db
+                ctx.status(200);
+                ctx.json(createdAcc);
+            }
+            
+            
+        });
 
         return app;
     }
