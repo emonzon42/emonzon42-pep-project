@@ -8,13 +8,18 @@ import Util.ConnectionUtil;
 
 public class AccountDAO {
     
+    private Connection conn; //db connection set on initalization
+
+    public AccountDAO(){
+        conn = ConnectionUtil.getConnection();
+    }
+    
     public List<Account> getAllAccounts(){
-        Connection connection = ConnectionUtil.getConnection();
         List<Account> accounts = new ArrayList<>();
         try {
             //Write SQL logic here
             String sql = "SELECT * FROM account;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
                 Account Account = new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password"));
@@ -27,13 +32,12 @@ public class AccountDAO {
     }
 
     public Account insertAccount(Account acc){
-        Connection connection = ConnectionUtil.getConnection();
         try {
 //          Write SQL logic here. You should only be inserting with the name column, so that the database may
 //          automatically generate a primary key.
 
             String sql = "INSERT INTO account (username, password) VALUES (?,?);" ;
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, acc.getUsername());
             preparedStatement.setString(2, acc.getUsername());
@@ -52,11 +56,10 @@ public class AccountDAO {
     }
 
     public Account getAccountByUsername(String username){
-        Connection connection = ConnectionUtil.getConnection();
         try {
             //Write SQL logic here
             String sql = "SELECT * FROM account WHERE username = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             //write preparedStatement's setInt method here.
             preparedStatement.setString(1, username);
@@ -75,11 +78,10 @@ public class AccountDAO {
     }
 
     public Account getAccount(Account acc){
-        Connection connection = ConnectionUtil.getConnection();
 
         try {
             String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, acc.getUsername());
             preparedStatement.setString(2, acc.getPassword());
 
