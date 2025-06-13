@@ -21,13 +21,13 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         ObjectMapper om = new ObjectMapper();
+        AccountService service = new AccountService();
 
         app.get("example-endpoint", this::exampleHandler);
         
         app.post("/register",  ctx -> { //register account
             String json = ctx.body();
             Account acc = om.readValue(json, Account.class);
-            AccountService service = new AccountService();
             
             Account createdAcc = service.createAccount(acc);
 
@@ -41,6 +41,19 @@ public class SocialMediaController {
             
             
         });
+
+        app.post("/login", ctx -> { //login to account
+            String json = ctx.body();
+            Account acc = om.readValue(json, Account.class);
+            Account verifiedAcc = service.verifyAccount(acc);
+            if (verifiedAcc != null) { //account exists in db
+                ctx.status(200);
+                ctx.json(verifiedAcc);
+            } else { //account failed to match an account on db
+                ctx.status(401);
+            }
+        });
+
 
         return app;
     }

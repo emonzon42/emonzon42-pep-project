@@ -33,4 +33,11 @@ public class AccountService {
             return dao.insertAccount(acc);
         } 
     }
+
+    /*
+     * verifies account exists in db
+     */
+    public Account verifyAccount(Account acc){
+        return dao.getAccount(acc);
+    }
 }
