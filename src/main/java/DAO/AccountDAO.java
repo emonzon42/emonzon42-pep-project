@@ -27,10 +27,6 @@ public class AccountDAO {
     }
 
     public Account insertAccount(Account acc){
-        if(acc.getUsername().isBlank() || acc.getPassword().length() < 4 || getAccountByUsername(acc.getUsername()) != null){
-            return null; //invalid username, invalid password, username already exists: return null
-        }
-
         Connection connection = ConnectionUtil.getConnection();
         try {
 //          Write SQL logic here. You should only be inserting with the name column, so that the database may
