@@ -40,7 +40,7 @@ public class AccountDAO {
             PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, acc.getUsername());
-            preparedStatement.setString(2, acc.getUsername());
+            preparedStatement.setString(2, acc.getPassword());
 
             
             preparedStatement.executeUpdate();
