@@ -36,4 +36,16 @@ public class MessageService {
             return null;
         }
     }
+
+    public Message findMessage(Message msg){
+        return findMessage(msg.getMessage_id());
+    }
+
+    public Message findMessage(int message_id){
+        return dao.getMessageById(message_id);
+    }
+
+    public List<Message> findAllMessagesBy(int user){
+        return dao.getAllMessagesByUser(user);
+    }
 }
