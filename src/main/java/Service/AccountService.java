@@ -27,7 +27,7 @@ public class AccountService {
      * password at least 4 characters
      */
     public Account createAccount(Account acc){
-        if(dao.getAccountByUsername(acc.getUsername()) != null || acc.getUsername().isBlank() || acc.getPassword().length() < 4){
+        if(verifyAccount(acc.getUsername()) != null || acc.getUsername().isBlank() || acc.getPassword().length() < 4){
             return null;
         } else{
             return dao.insertAccount(acc);
@@ -39,5 +39,13 @@ public class AccountService {
      */
     public Account verifyAccount(Account acc){
         return dao.getAccount(acc);
+    }
+
+    public Account verifyAccount(int account_id){
+        return dao.getAccountById(account_id);
+    }
+
+    public Account verifyAccount(String username){
+        return dao.getAccountByUsername(username);
     }
 }
