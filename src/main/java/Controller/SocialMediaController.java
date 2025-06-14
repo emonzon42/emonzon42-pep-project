@@ -21,22 +21,21 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         ObjectMapper om = new ObjectMapper();
-        AccountService service = new AccountService();
+        AccountService as = new AccountService();
+        MessageService ms = new MessageService();
 
         app.get("example-endpoint", this::exampleHandler);
         
         app.post("/register",  ctx -> { //register account
             String json = ctx.body();
-            Account acc = om.readValue(json, Account.class);
-            
-            Account createdAcc = service.createAccount(acc);
+            Account acc = as.createAccount(om.readValue(json, Account.class));
 
-            if (createdAcc == null) { //account failed to persist to db
+            if (acc == null) { //account failed to persist to db
                 ctx.status(400);
                 //ctx.result("Account not created, password must be greater than 4 characters / username cannot be blank / account already exists");
             } else{ //account successfully was created in db
                 ctx.status(200);
-                ctx.json(createdAcc);
+                ctx.json(acc);
             }
             
             
@@ -44,14 +43,29 @@ public class SocialMediaController {
 
         app.post("/login", ctx -> { //login to account
             String json = ctx.body();
-            Account acc = om.readValue(json, Account.class);
-            Account verifiedAcc = service.verifyAccount(acc);
-            if (verifiedAcc != null) { //account exists in db
+            Account acc = as.verifyAccount(om.readValue(json, Account.class));
+
+            if (acc != null) { //account exists in db
                 ctx.status(200);
-                ctx.json(verifiedAcc);
+                ctx.json(acc);
             } else { //account failed to match an account on db
                 ctx.status(401);
             }
+        });
+
+        app.post("/messages", ctx -> {
+            String json = ctx.body();
+            Message msg = ms.createMessage(om.readValue(json, Message.class));
+            
+            if (msg != null) {//message successfully created to db
+                ctx.status(200);
+                ctx.json(msg);
+            } else {//message failed to persist into db
+                ctx.status(400);
+            }
+
+            
+
         });
 
 
