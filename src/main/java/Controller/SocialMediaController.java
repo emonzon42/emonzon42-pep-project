@@ -87,7 +87,6 @@ public class SocialMediaController {
                 System.out.println(e.getMessage());
                 ctx.status(400);
             }
-            
         });
 
         app.get("/messages", ctx -> {
