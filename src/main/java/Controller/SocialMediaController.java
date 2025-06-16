@@ -84,6 +84,23 @@ public class SocialMediaController {
 
         });
 
+        app.delete("messages/{message_id}", ctx -> {
+            String messageid = ctx.pathParam("message_id");
+
+            try {
+                Message msg = ms.deleteMessage(Integer.parseInt(messageid));
+
+                if (msg != null) {
+                    ctx.json(msg);
+                }
+                
+            } catch (NumberFormatException e) {
+                System.err.println(e.getMessage());
+            }
+
+            ctx.status(200);
+        });
+
 
         return app;
     }

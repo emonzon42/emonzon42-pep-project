@@ -98,4 +98,24 @@ public class MessageDAO {
 
         return messages;
     }
+
+    public Message deleteMessageFromDB(int message_id){
+        try {
+            String sql = "DELETE FROM message WHERE message_id = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, message_id);
+            Message msg = getMessageById(message_id);
+
+            ;
+            if(preparedStatement.executeUpdate() > 0){
+                return msg;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
 }

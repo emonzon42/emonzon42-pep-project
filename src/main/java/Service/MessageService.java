@@ -48,4 +48,8 @@ public class MessageService {
     public List<Message> findAllMessagesBy(int user){
         return dao.getAllMessagesByUser(user);
     }
+
+    public Message deleteMessage(int message_id){
+        return dao.deleteMessageFromDB(message_id);
+    }
 }
