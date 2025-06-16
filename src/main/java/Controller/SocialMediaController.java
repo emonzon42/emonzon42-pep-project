@@ -90,6 +90,12 @@ public class SocialMediaController {
             
         });
 
+        app.get("/messages", ctx -> {
+            List<Message> msgs = ms.getAllMessages();
+            ctx.json(msgs);
+            ctx.status(200);
+        });
+
         app.get("/messages/{message_id}", ctx -> {
             String messageid = ctx.pathParam("message_id");
             
