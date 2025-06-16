@@ -1,5 +1,7 @@
 package Controller;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Service.*;
@@ -106,6 +108,25 @@ public class SocialMediaController {
             ctx.status(200);
 
         });
+
+        app.get("/accounts/{account_id}/messages", ctx -> {
+            String accountid = ctx.pathParam("account_id");
+
+            try {
+                List<Message> msgs = ms.findAllMessagesBy(Integer.parseInt(accountid));
+
+                if (msgs != null) {
+                    ctx.json(msgs);
+                }
+                
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+            }
+
+            ctx.status(200);
+        });
+
+        
 
         app.delete("messages/{message_id}", ctx -> {
             String messageid = ctx.pathParam("message_id");
