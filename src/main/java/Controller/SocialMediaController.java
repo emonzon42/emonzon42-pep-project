@@ -65,6 +65,29 @@ public class SocialMediaController {
             }
         });
 
+        app.patch("messages/{message_id}", ctx -> {
+            String messageid = ctx.pathParam("message_id");
+            String json = ctx.body();
+            Message newMessage = om.readValue(json, Message.class);
+            
+            try {
+                newMessage.setMessage_id(Integer.parseInt(messageid));
+                Message msg = ms.updateMessage(newMessage);
+
+                if (msg != null) {
+                    ctx.status(200);
+                    ctx.json(msg);
+                } else{
+                    ctx.status(400);
+                }
+                
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                ctx.status(400);
+            }
+            
+        });
+
         app.get("/messages/{message_id}", ctx -> {
             String messageid = ctx.pathParam("message_id");
             

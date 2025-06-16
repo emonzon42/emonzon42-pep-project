@@ -52,4 +52,20 @@ public class MessageService {
     public Message deleteMessage(int message_id){
         return dao.deleteMessageFromDB(message_id);
     }
+
+     /*
+     * updates message in db as long as conditions are met:
+     * message isnt blank
+     * message is less than 255 characters
+     * message_id refers to message in db
+     */
+    public Message updateMessage(Message msg){
+        if (findMessage(msg) != null 
+        && !msg.getMessage_text().isBlank() 
+        && msg.getMessage_text().length() < 255 ) {
+            return dao.updateMessage(msg);
+        } else{
+            return null;
+        }
+    }
 }
