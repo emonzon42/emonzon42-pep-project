@@ -63,8 +63,24 @@ public class SocialMediaController {
             } else {//message failed to persist into db
                 ctx.status(400);
             }
+        });
 
+        app.get("/messages/{message_id}", ctx -> {
+            String messageid = ctx.pathParam("message_id");
             
+            try {
+                Message msg = ms.findMessage(Integer.parseInt(messageid));
+
+                if (msg != null) {
+                    ctx.json(msg);
+                }
+                
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                ctx.result("");
+            }
+
+            ctx.status(200);
 
         });
 
